@@ -29,6 +29,7 @@ void UART_init(uint32_t baud_rate){
 }
 
 void print_char(uint8_t data){
+	while(!(UART0_S1 & UART_S1_TDRE_MASK)){}
 	UART0 -> D = data; 
 }
 
@@ -39,6 +40,27 @@ void print_word(const uint8_t *str)
 			 while(!(UART0_S1 & UART_S1_TDRE_MASK)){}
         print_char(*str++);
     }
+}
+
+static uint8_t len_of_num(uint16_t num){
+	if (num >= 10000) { return 5;}
+	if (num >= 1000) { return 4;}
+	if (num >= 100) { return 3;}
+	if (num >= 10) { return 2;}
+	return 1;
+}
+
+void print_num(uint16_t value){
+	static uint8_t len = 1;
+	char num_to_print[5];
+	len = len_of_num(value);
+	for(uint8_t i = 0; i < len; i++){
+		num_to_print[i] = value%10;
+		value = value/10;
+	}
+	for(uint8_t i = 0; i < len; i++){
+		print_char(number[num_to_print[len - i - 1]]);
+	}		
 }
 
 uint8_t recive(){
