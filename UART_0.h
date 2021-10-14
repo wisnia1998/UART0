@@ -19,4 +19,4 @@ void print_word(const uint8_t *str);
 void print_num(uint16_t value);
 uint8_t recive();
 
-static uint8_t len_of_num(uint16_t num);
+static uint8_t len_of_num(uint32_t num);
