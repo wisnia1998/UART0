@@ -13,7 +13,7 @@ void UART_init(uint32_t baud_rate){
 	// ensure tx and rx are disabled before configuration
 	UART0->C2 &= ~(UARTLP_C2_TE_MASK | UARTLP_C2_RE_MASK);
 	
-	UART0 -> C4 |= UART0_C4_OSR(0b1111);//próbkowanie nadmiarowe   16
+	UART0 -> C4 |= UART0_C4_OSR(0b1111);//prÃ³bkowanie nadmiarowe   16
 	UART0 -> BDH |= UART0_BDH_SBR(0b0);					//
 	UART0 -> BDL |= UART0_BDL_SBR(0b10001000);	//9600 b/s   136
 	// Set baud rate to 9600 baud^
@@ -42,12 +42,14 @@ void print_word(const uint8_t *str)
     }
 }
 
-static uint8_t len_of_num(uint16_t num){
-	if (num >= 10000) { return 5;}
-	if (num >= 1000) { return 4;}
-	if (num >= 100) { return 3;}
-	if (num >= 10) { return 2;}
-	return 1;
+static uint8_t len_of_num(uint32_t num){
+    uint8_t length_n = 1;
+    while (num / 10)
+    {
+        num /= 10;
+        length_n++;
+    }
+    return length_n;
 }
 
 void print_num(uint16_t value){
